@@ -1,0 +1,80 @@
+@startuml
+skinparam activity {
+  BackgroundColor White
+  BorderColor #333333
+  ArrowColor #333333
+}
+skinparam shadowing false
+skinparam defaultFontName Monospace
+
+title Automated Correction Pipeline (Phase & Call)
+
+start
+:Time event triggers processing\nfor a specific Phase (1 or 2) and Call;
+:Fetch all delivery information (JSON)\nfrom Moodle for Phase & Call;
+
+repeat
+  :Load next delivery information (DI)\n(student_id, group_id, phase, lab_id,\nblocks[], test_sha, merge_sha, etc.);
+
+  if (Delivery info present?) then (no)
+    :FAIL → "No delivery information";\nRegister incident;\nPost draft feedback in Moodle;
+  else (yes)
+    :Parse & validate DI JSON\n(keys, formats, allowed values,\nblocks vs phase constraints);
+    if (DI valid?) then (no)
+      :FAIL → "Malformed delivery information";\nAttach parser diagnostics;\nPost draft feedback in Moodle;
+    else (yes)
+      :Extract fields:\nmerge_commit, test_commit,\nmerge_sha, test_sha, blocks[], lab_id,\ncommit_dates (merge/test), student_id, group_id;
+
+      :Clone/Fetch repository and checkout **test_sha**;
+      if (test checkout ok?) then (no)
+        :FAIL → "Test commit not found";\nPost draft feedback in Moodle;
+      else (yes)
+        :Checkout **merge_sha**;
+        if (merge checkout ok?) then (no)
+          :FAIL → "Merge commit not found";\nPost draft feedback in Moodle;
+        else (yes)
+          :Compare lab deadline vs commit dates;
+          if (any commit date > lab deadline?) then (yes)
+            :FAIL → "Commit after deadline";\nPost draft feedback in Moodle;
+          else (no)
+            :Apply linting & policy checks:\nstyle rules, repeated errors,\ngroup coherence, Moodle consistency;
+            if (Lint passed?) then (no)
+              :FAIL → "Lint/Policy violations";\nPost draft feedback in Moodle;
+            else (yes)
+              :Stage clean JPprofes workspace;
+              if (Phase == 1?) then (yes)
+                :Move **candy1_XXX.s** into JPprofes tree;
+              else (Phase 2)
+                :Move **candy2_XXX.s**, RSI, and related files → JPprofes tree;
+              endif
+
+              :Copy extra declarations from **candy1_incl.i**\ninto **xtra1_incl.i/h** or **xtra2_incl.i/h**;
+
+              :Compile project with BMDE/CDE;
+              if (Build success?) then (no)
+                :FAIL → "Compilation error";\nPost draft feedback in Moodle;
+              else (yes)
+                :Prepare DeSmuME CLI runtime;
+                :Derive **input.txt** from DI **blocks[]**;
+                :Create fresh FAT image and add **input.txt**;
+                :Run ROM in DeSmuME CLI (with timeout);
+                if (Timeout?) then (yes)
+                  :FAIL → "Infinite loop / deadlock";\nPost draft feedback in Moodle;
+                else (no)
+                  :Execution ended normally;\nMount FAT image and harvest outputs:\n**1A.txt, 1B.txt, …**;
+                  :Translate outputs → feedback text;\nPost draft feedback in Moodle;
+                endif
+              endif
+            endif
+          endif
+        endif
+      endif
+    endif
+  endif
+
+repeat while (More deliveries?)
+
+:No more deliveries for this Phase & Call;
+stop
+@enduml
+
