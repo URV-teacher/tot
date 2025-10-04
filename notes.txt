@@ -1,0 +1,19 @@
+Afegir dockerfile a desmumecli per a compilar la 0.9.11
+Arma synrax workflow autopublicació y creació d'article a botiga 
+Instalació bmde Linux amb scriot sobre màquina normal
+Repo vscode custom, dockerfile vscode 
+Fer passar gdb stubs amb desmume cli
+Auto-release in hello world, to be considered a template
+Repo Git clone with VPN
+Repo software to get JSONs from Moodle
+Repo software to parse and validate Jason data (at JSON level in a first implementation and expanded to validation with Moodle data in future versions or another intermediate component)
+Repo for heuristics validation 
+Repo software to translate JPProfes codes and detected heuristics onto a natural language message
+Repo software to upload drafted message to email and in future versions give interviews in Moodle or create calendar events 
+JPprofes create data structure for common data and print it into file, use 1A as example
+
+
+
+
+Llenguatge de programació ole:
+Vanpiro esiten. // Per declarar variables 
