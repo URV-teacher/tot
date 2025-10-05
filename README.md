@@ -105,6 +105,34 @@ If possible, the option `--dry-run` will be implemented to simulate what the pro
 
 With `--verbose` shows more information and with `--trace` shows all logs. With `-q` shows no output.   
 
+## tot patch
+This module patches NDS binaries so that they can access a FAT image.
+
+### Mandatory arguments
+A valid NDS binary must be provided for the module to run. This information can be supplied or assumed in 
+different
+ways.
+
+With no arguments, this module patches the first `.nds` file found in the directory where `tot` is invoked. 
+
+With `-f PATH/TO/DIR/WITH/NDS/file.nds` the module will behave the same as with no arguments, but using the passed 
+file as the file to be patched. 
+
+### Optional arguments
+With `-e` or `--environment docker|(host|bmde)` you can choose what backend you are using to build the NDS 
+binary. 
+* With `docker`
+it uses the devkitarm-docker project to run the binary. 
+* With `host` uses the shell command `desmume` to run the binary, whatever is the implementation of the underlying 
+binary.
+
+The default backend is `docker`.
+
+If possible, the option `--dry-run` will be implemented to simulate what the program would do.
+
+With `--verbose` shows more information and with `--trace` shows all logs. With `-q` shows no output.   
+
+
 ## tot clean
 Wrapper for `tot build -- clean`, to provide a handy way to clean the project artifacts. It has the same arguments as 
 `tot build` with a fe differences.
@@ -203,24 +231,29 @@ directory as the directory where the NDS project to build is located.
 With `-e` or `--environment docker|(host|bmde)` you can choose what backend you are using to build the NDS 
 binary. 
 * With `docker`
-it uses the devkitarm-docker project to run the binary. 
-* With `host` uses the shell command `desmume` to run the binary, whatever is the implementation of the underlying 
+it uses the vscode-docker project to edit the project.
+* With `host` uses the shell command `vscode` to edit the project, whatever is the implementation of the underlying 
 binary.
 
-The default entrypoint for all backends is `make`.
+The default entrypoint for all backends is `vscode`.
 
 The option 
 `--entrypoint PATH/TO/ENTRYPOINT` is available, which allows to override the file executed as entrypoint.
 
-When using the backend `docker`, the option `-s` or `--shell` can be used, which gives a shell inside
-the Docker container
-used for building the project.
-
 All options after `--` will be passed to the underlying entrypoint if possible.
 
-If possible, the option `--dry-run` will be implemented to simulate what the program would do.
-
 With `--verbose` shows more information and with `--trace` shows all logs. With `-q` shows no output.   
+
+## tot debug
+
+## tot validate
+
+
+## tot lint
+
+## tot prepare
+
+## tot test
 
 
 

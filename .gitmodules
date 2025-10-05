@@ -1,0 +1,15 @@
+[submodule "components/delivery-validator"]
+	path = components/delivery-validator
+	url = https://github.com/URV-teacher/delivery-validator
+[submodule "components/devkitarm-nds-docker"]
+	path = components/devkitarm-nds-docker
+	url = https://github.com/URV-teacher/devkitarm-nds-docker
+[submodule "components/desmume-docker"]
+	path = components/desmume-docker
+	url = https://github.com/URV-teacher/desmume-docker
+[submodule "components/git-urv-vpn-docker"]
+	path = components/git-urv-vpn-docker
+	url = https://github.com/URV-teacher/git-urv-vpn-docker
+[submodule "components/PracticaCompus_2024"]
+	path = components/PracticaCompus_2024
+	url = https://github.com/SantiagoRomani/PracticaCompus_2024
