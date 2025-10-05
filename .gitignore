@@ -135,7 +135,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+example.env
 .envrc
 .venv
 env/
@@ -208,3 +208,4 @@ __marimo__/
 
 # Own gitignore rules
 .idea
+.env
