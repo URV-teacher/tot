@@ -1,6 +1,7 @@
 import logging
 from rich.logging import RichHandler
 
+
 def setup_logging(level: str) -> None:
     # map custom 'trace' and 'quiet'
     if level == "trace":

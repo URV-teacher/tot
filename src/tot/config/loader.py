@@ -7,6 +7,15 @@ from ..core.paths import find_upwards
 
 
 def read_toml(path: Path) -> dict:
+    """
+        Reads .toml file with its paths and returns a dictionary with its values.
+
+    Args:
+        path: Path of the TOML file.
+
+    Returns: Plain dictionary with the key-values of the TOML file.
+
+    """
     if not path or not path.is_file():
         return {}
     with path.open("rb") as f:
@@ -14,6 +23,18 @@ def read_toml(path: Path) -> dict:
 
 
 def env_config(prefix="TOT_") -> dict:
+    """
+        Reads the configuration from the environment and returns it as a dictionary of the read subcommands
+
+    Args:
+        prefix: The prefix that the system variables must have to be added to the dictionary.
+
+    Returns:
+        Nested dictionary. The first key is the word after the first _ of the name of the system variable in lowercase,
+        which represents the subcommand name (run, build...) and the second key is the rest of the name of the system
+        variable in lowercase.
+
+    """
     # Flattened env → nested dict (e.g., TOT_RUN_ENVIRONMENT=docker)
     result: dict = {}
     for k, v in os.environ.items():
@@ -28,6 +49,15 @@ def env_config(prefix="TOT_") -> dict:
 
 
 def merge(a: dict, b: dict) -> dict:
+    """
+
+    Args:
+        a:
+        b:
+
+    Returns:
+
+    """
     out = dict(a)
     for k, v in b.items():
         if isinstance(v, dict) and isinstance(out.get(k), dict):
