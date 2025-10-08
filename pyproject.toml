@@ -1,10 +1,10 @@
 [project]
 name = "tot"
 version = "0.1.0"
-description = "CLI to manage the corrections workflow (URV)"
+description = "CLI for NDS development for the practical exercises of Computers"
 readme = "README.md"
-requires-python = ">=3.8"
-authors = [{name="Your Name"}]
+requires-python = ">=3.11"
+authors = [{name="AleixMT"}]
 license = {text="GPL-3.0-or-later"}
 dependencies = [
   "typer[all]>=0.12",

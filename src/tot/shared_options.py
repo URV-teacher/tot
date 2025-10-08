@@ -1,6 +1,7 @@
 # src/tot/shared_options.py
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Optional
 from typing_extensions import Annotated
 import typer
@@ -11,13 +12,13 @@ EnvironmentOpt = Annotated[
     typer.Option(
         "-e",
         "--environment",
-        help="Backend environment: host|docker|flatpak|bmde",
+        help="Backend environment: host|docker|flatpak",
         case_sensitive=False,
     ),
 ]
 
 EntrypointOpt = Annotated[
-    Optional[str],
+    Optional[Path],
     typer.Option(
         "--entrypoint",
         help="Override backend entrypoint executable",
@@ -51,15 +52,6 @@ DryRunOpt = Annotated[
     ),
 ]
 
-TraceOpt = Annotated[
-    bool,
-    typer.Option(
-        "--trace",
-        help="Trace logs (overrides verbose/quiet)",
-        is_flag=True,
-    ),
-]
-
 VerboseOpt = Annotated[
     bool,
     typer.Option(
@@ -80,13 +72,23 @@ QuietOpt = Annotated[
     ),
 ]
 
+DockerScreenOpt = Annotated[
+    Optional[str],
+    typer.Option(
+        "-s",
+        "--screen",
+        help="Method to show the screen when using the \"docker\" environment",
+        is_flag=True,
+    ),
+]
+
 __all__ = [
     "EnvironmentOpt",
     "EntrypointOpt",
     "DebugOpt",
     "PortOpt",
     "DryRunOpt",
-    "TraceOpt",
     "VerboseOpt",
     "QuietOpt",
+    "DockerScreenOpt"
 ]

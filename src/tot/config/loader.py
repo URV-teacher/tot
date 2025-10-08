@@ -1,10 +1,13 @@
 from __future__ import annotations
+
+import logging
 import os
 from pathlib import Path
 import tomllib
 from .schema import Settings
 from ..core.paths import find_upwards
 
+log = logging.getLogger(__name__)
 
 def read_toml(path: Path) -> dict:
     """
@@ -19,6 +22,7 @@ def read_toml(path: Path) -> dict:
     if not path or not path.is_file():
         return {}
     with path.open("rb") as f:
+        log.info("Reading TOML file: %s", path)
         return tomllib.load(f)
 
 
