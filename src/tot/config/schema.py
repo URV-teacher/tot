@@ -1,12 +1,12 @@
-from pydantic import BaseModel, Field
+"""
+Defines the schema of settings of the application
+"""
 from typing import Literal, Optional
 
+from pydantic import BaseModel
+
+# The possible backends that we have on the submodules
 EnvName = Literal["host", "docker", "flatpak", "bmde"]
-
-
-class LoggingSettings(BaseModel):
-    level: Literal["trace", "debug", "info", "warning", "error", "quiet"] = "info"
-
 
 class RunSettings(BaseModel):
     environment: Optional[EnvName] = None
@@ -29,6 +29,11 @@ class GitVpnSettings(BaseModel):
     port: Optional[int] = None
 
 
+
+class LoggingSettings(BaseModel):
+    level: Literal["trace", "debug", "info", "warning", "error", "quiet"] = "info"
+
+
 class GitUserSettings(BaseModel):
     name: Optional[str] = None
     email: Optional[str] = None
@@ -39,13 +44,13 @@ class GitAuthSettings(BaseModel):
     password: Optional[str] = None
     host: Optional[str] = None
 
-
 class GitSettings(BaseModel):
     vpn: GitVpnSettings = GitVpnSettings()
     user: GitUserSettings = GitUserSettings()
     auth: GitAuthSettings = GitAuthSettings()
     environment: Optional[EnvName] = None
     entrypoint: Optional[str] = "git"
+
 
 
 class Settings(BaseModel):

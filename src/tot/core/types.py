@@ -1,4 +1,6 @@
-# src/tot/core/types.py
+"""
+Helpers to parse strings & map log levels.
+"""
 from __future__ import annotations
 
 import logging
@@ -31,8 +33,8 @@ class Environment(str, Enum):
             raise ValueError(f"Unknown environment '{value}'. Valid: {valid}") from exc
 
 
-#: Default backend priority when auto-selecting a runner for `tot run`.
-#: According to the spec: host > docker > flatpak.
+# Default backend priority when auto-selecting a runner for `tot run`.
+# host > docker > flatpak.
 DEFAULT_RUN_ENV_PRIORITY: List[Environment] = [
     Environment.HOST,
     Environment.DOCKER,
@@ -42,9 +44,7 @@ DEFAULT_RUN_ENV_PRIORITY: List[Environment] = [
 #: Reasonable default priority for build/patch flows (you can override per module).
 DEFAULT_BUILD_ENV_PRIORITY: List[Environment] = [
     Environment.HOST,
-    Environment.DOCKER,
-    # BMDE can be treated as a host-like variant if/when you wire it:
-    # Environment.BMDE,
+    Environment.DOCKER
 ]
 
 
