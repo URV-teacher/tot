@@ -17,3 +17,17 @@ JPprofes create data structure for common data and print it into file, use 1A as
 
 Llenguatge de programació ole:
 Vanpiro esiten. // Per declarar variables 
+
+
+
+
+${EMULATOR_CMD[@]} 2>&1 \
+| tee -a "$LOG_FILE" \
+| awk '
+    {print $1;}  # echo every line back to console
+    index($0, pat) {
+      printf("[watchdog] Detected pattern: \"%s\" → requesting shutdown...\n", pat) > "/dev/stderr";
+      system("kill -TERM " ENVIRON["EMU_PID"]);
+    }
+  ' &
+EMU_PID=$!

@@ -28,8 +28,10 @@ class DockerRunner(RunnerBackend):
                      "-e", "GEOMETRY=1024x768x24",
                      "-e", "VNC_PORT=5900"]
         if spec.docker_screen == "vnc":
-            ports += ["-p", "3000:3000", "-p", "3001:3001"]
-            envs += ["-e", "MODE=vnc", "-e", "DISPLAY=:0"]
+            ports += ["-p", "3000:3000",
+                      "-p", "3001:3001"]
+            envs += ["-e", "MODE=vnc",
+                     "-e", "DISPLAY=:0"]
         if spec.entrypoint:
             entry = str(spec.entrypoint) or "desmume"
 

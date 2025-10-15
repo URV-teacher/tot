@@ -209,3 +209,4 @@ __marimo__/
 # Own gitignore rules
 .idea
 .env
+!src/tot/build

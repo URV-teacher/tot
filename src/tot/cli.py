@@ -1,7 +1,13 @@
-# src/tot/cli.py
+"""
+The responsibility of this file is to implement the functions that will be called when calling each subcommand in the
+CLI. Each function is responsible for attending a single subcommand with their arguments specified through the function
+typehint arguments using Typer. Each function will build a Settings object with the CLI overrides passed to the
+function and run a
+"""
 from __future__ import annotations
 
 import logging
+import os
 from typing import List, Optional
 from pathlib import Path
 import typer
@@ -16,7 +22,7 @@ from .shared_options import (
 )
 
 console = Console()
-app = typer.Typer(help="tot – URV corrections workflow CLI", no_args_is_help=True)
+app = typer.Typer(help="tot – BMDE CLI", no_args_is_help=True)
 log = logging.getLogger("tot.cli")
 
 @app.callback()
@@ -92,3 +98,66 @@ def run_command(
         nds=nds, image=image, shell=shell,
         passthrough=passthrough or [], settings=settings, dry_run=dry_run
     )
+
+
+
+@app.command("build")
+def build_command(
+        ctx: typer.Context,
+
+        d: Optional[Path] = typer.Option(
+            None,
+            exists=True,
+            file_okay=False,
+            dir_okay=True,
+            readable=True,
+            resolve_path=True,
+            help="Path to the project directory. If omitted, the current directory is used."
+        ),
+
+        # <-- make passthrough variadic (nargs=-1). Typer forwards this to Click.
+        passthrough: Optional[List[str]] = typer.Argument(
+            None,
+            help="Arguments after '--' are passed directly to the backend entrypoint.",
+            show_default=False,
+        ),
+
+        shell: bool = typer.Option(False, "-s", "--shell", is_flag=True,
+                                   help="Open backend shell (docker only)"),
+        environment: EnvironmentOpt = None,
+        entrypoint: EntrypointOpt = None,
+        dry_run: DryRunOpt = False,
+        verbose: VerboseOpt = False,
+        quiet: QuietOpt = False,
+):
+    print("d:" + str(d))
+    print("passthrough:" + str(passthrough))
+
+    """Run an NDS binary via selected backend (host|docker|flatpak)."""
+    from .build.command import build_nds_command
+
+    settings: Settings = ctx.obj["settings"]
+
+    # CLI overrides
+    if environment is not None:
+        settings.build.environment = environment
+    if entrypoint is not None:
+        settings.build.entrypoint = entrypoint
+    if quiet:
+        settings.logging.level = "quiet"
+    if verbose:
+        settings.logging.level = "trace"
+    if d is None:
+        d = os.getcwd()
+        print(d)
+
+
+    # CLI logic
+    if entrypoint is not None and shell is True:
+        log.warning("The --entrypoint option is incompatible with --shell, entrypoint will be ignored")
+
+    build_nds_command(
+        d=d, shell=shell,
+        passthrough=passthrough or [], settings=settings, dry_run=dry_run
+    )
+
